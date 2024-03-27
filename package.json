@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "build":"npm i mysql knex express dotenv"
+    "build":"npm i mysql knex express dotenv nodemon"
   },
   "author": "",
   "license": "ISC",
