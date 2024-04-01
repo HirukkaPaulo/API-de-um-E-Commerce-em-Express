@@ -16,6 +16,7 @@ export const get = (pedidoId) => {
     .first() 
 }
 
+
 export const save = (pedido) => {
     return knex().from(table).insert(pedido);
 }

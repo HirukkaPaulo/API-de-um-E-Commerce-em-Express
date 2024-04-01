@@ -16,6 +16,13 @@ export const get = (productId) => {
     .first() 
 }
 
+export const getByName = (produto) => {
+    return knex()
+    .from(table)
+    .where( {produto:produto} )
+    .select('*')
+    .first() 
+}
 export const save = (product) => {
     return knex().from(table).insert(product);
 }

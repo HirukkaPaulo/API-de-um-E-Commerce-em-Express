@@ -8,23 +8,31 @@ export const getAll = () => {
     .from(table)
 }
 
-export const get = (produtosId) => {
+export const get = (produtoId) => {
     return knex()
     .from(table)
-    .where( {id:produtosId} )
+    .where( {id:produtoId} )
     .select('*')
     .first() 
 }
 
-export const save = (produtos) => {
-    return knex().from(table).insert(produtos);
+export const getByName = (nomeProduto) => {
+    return knex()
+    .from(table)
+    .where( {nome:nomeProduto} )
+    .select('*')
+    .first() 
 }
 
-export const remove = (produtosId) => {
-    return knex().from(table).where({id:produtosId}).delete()
+export const save = (produto) => {
+    return knex().from(table).insert(produto);
 }
 
-export const update = (produtosId,params) => {
-    return knex().from(table).where({id:produtosId}).update(params)
+export const remove = (produtoId) => {
+    return knex().from(table).where({id:produtoId}).delete()
+}
+
+export const update = (produtoId,params) => {
+    return knex().from(table).where({id:produtoId}).update(params)
 }
 

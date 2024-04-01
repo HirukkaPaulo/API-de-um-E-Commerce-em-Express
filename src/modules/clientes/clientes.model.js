@@ -16,6 +16,14 @@ export const get = (clienteId) => {
     .first() 
 }
 
+export const getByEmail = (clienteEmail) => {
+    return knex()
+    .from(table)
+    .where( {email:clienteEmail} )
+    .select('*')
+    .first() 
+}
+
 export const save = (cliente) => {
     return knex().from(table).insert(cliente);
 }

@@ -1,31 +1,44 @@
 import { Router } from 'express';
-import { remove, update, save, get, getAll } from './index.js';
+import { remove, update, save, get, getAll, getByEmail } from './index.js';
 
 const router = Router();
 
 router.get('/',async (_,res) => {
     try{
         const data = await getAll();
-        res.status(200).json({data})
+        if(data){
+            return res.status(200).json({data})  
+        }else{
+            return res.status(404).json([{msg: "Não existe nenhum cliente na lista."}])
+        }
     }catch(error){
-        res.json({data:"Não foi possível obter a lista de clientes."})
+        res.status(500).json({data:"Não foi possível obter a lista de clientes."})
     }
 })
 
 router.get('/:id',async (req,res) => {
-    try{
+    try{ 
         const data = await get(req.params.id);
-        res.status(200).json({data})
+        if(data){
+            res.status(200).json({data})
+        }else{
+            return res.status(404).json({msg: "Não existe nenhum cliente com este ID."})
+        }
     }catch(error){
-        res.json({data:"Não foi possível encontrar o cliente."})
+        return res.status(500).json({error:'Erro interno do servidor.'})
     }
-    
+  
 })
 
 router.post('/',async (req,res) => {
+    const clienteExistente = await getByEmail(req.body.email)
     try{
-        const data = await save(req.body);
-    res.status(200).json({data})
+        if(clienteExistente){
+            return res.status(404).json({msg: "Já existe um cliente cadastrado com este email."})   
+        }else{
+            const data = await save(req.body);
+            res.status(200).json({data})
+        }  
     }catch(error){
         res.json({data:"Não foi possível cadastrar o cliente."})
     }
@@ -35,9 +48,13 @@ router.post('/',async (req,res) => {
 router.put('/:id',async (req,res) => {
     try{
         const data = await update(req.params.id,req.body);
-        res.status(200).json({data})
+        if(data){
+            res.status(200).json({data}) 
+        }else{
+            return res.status(404).json({msg: "Não existe nenhum cliente com este ID para atualizar."})
+        }
     }catch(error){
-        res.json({data:"Não foi possível atualizar o cliente."})
+        res.status(500).json({data:"Não foi possível atualizar o cliente."})
     }
     
 })
@@ -45,9 +62,13 @@ router.put('/:id',async (req,res) => {
 router.delete('/:id',async (req,res) => {
     try{
         const data = await remove(req.params.id);
-    res.status(200).json({data})
+        if(data){
+            res.status(200).json({data})
+        }else{
+            return res.status(404).json({msg: "Não existe nenhum cliente com este ID para ser deletado."})
+        }
     }catch(error){
-        res.json({data:"Não foi possível deletar o cliente."})
+        res.status(500).json({data:"Não foi possível deletar o cliente."})
     }
     
 })
